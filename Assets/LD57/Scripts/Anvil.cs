@@ -58,7 +58,8 @@ public class Anvil : MonoBehaviour
 
         for (int i = 0; i < itemsCrafted; i++)
         {
-            Instantiate(currentRecipe.Output.Model, outputPoint.transform.position, Quaternion.identity);
+            var item = Instantiate(currentRecipe.Output.Model, outputPoint.transform.position, Quaternion.identity);
+            item.GetComponent<PickupController>().Item = currentRecipe.Output;
         }
 
         Instantiate(smeltDoneParticleEffect, outputPoint.transform);

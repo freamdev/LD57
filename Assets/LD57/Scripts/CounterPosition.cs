@@ -4,7 +4,7 @@ using UnityEngine;
 public class CounterPosition : MonoBehaviour
 {
     public GameObject dwarf;
-    public GameObject requestedItem;
+    public Item requestedItem;
     public Transform dwarfSpawnPosition;
     public Transform itemRequestPoint;
 
@@ -22,7 +22,7 @@ public class CounterPosition : MonoBehaviour
     {
         dwarf = d;
         requestedItem = GameManager.GetInstance().allItems.OrderBy(o => System.Guid.NewGuid()).FirstOrDefault();
-        itemVisual = Instantiate<GameObject>(requestedItem, itemRequestPoint.position, Quaternion.Euler(0, 0, 45));
+        itemVisual = Instantiate<GameObject>(requestedItem.Visual, itemRequestPoint.position, Quaternion.Euler(0, 0, 45));
         requestTime = waitTime;
         fulfilled = false;
     }
@@ -35,7 +35,7 @@ public class CounterPosition : MonoBehaviour
             && !other.gameObject.GetComponent<PickupController>().IsHeld)
         {
 
-            TryFulfill(other.gameObject);
+            TryFulfill(other.gameObject.GetComponent<PickupController>());
         }
     }
 
@@ -57,11 +57,11 @@ public class CounterPosition : MonoBehaviour
         }
     }
 
-    public void TryFulfill(GameObject item)
+    public void TryFulfill(PickupController item)
     {
-        if (item == requestedItem || true)
+        if (item.Item.Id == requestedItem.Id)
         {
-            Destroy(item);
+            Destroy(item.gameObject);
             LeaveHappy();
         }
     }

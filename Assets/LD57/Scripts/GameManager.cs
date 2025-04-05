@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     static GameManager instance;
 
     public TextMeshProUGUI goldText;
-    public List<GameObject> allItems;
+    public List<Item> allItems;
 
     public float smeltingSpeedMultiplier;
     public float craftingSpeedMultiplier;
