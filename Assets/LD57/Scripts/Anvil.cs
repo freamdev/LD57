@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Anvil : MonoBehaviour
@@ -10,28 +11,72 @@ public class Anvil : MonoBehaviour
     public GameObject smeltStartedParticleEffect;
     public GameObject smeltDoneParticleEffect;
 
+    ItemRecipe currentRecipe;
+
+    List<GameObject> itemsOnMe;
+
+    private void Awake()
+    {
+        itemsOnMe = new List<GameObject>();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        print(other);
         if (other.gameObject.layer == 7
             && other.gameObject.GetComponent<PickupController>() != null
             && other.gameObject.GetComponent<PickupController>().IsResource
             && !other.gameObject.GetComponent<PickupController>().IsHeld)
         {
-            other.GetComponent<Collider>().enabled = false;
-            other.GetComponent<Rigidbody>().isKinematic = true;
+            itemsOnMe.Add(other.gameObject);
 
-            StartCoroutine(SmeltOre(other.gameObject));
         }
     }
 
-    private IEnumerator SmeltOre(GameObject ore)
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == 7
+          && other.gameObject.GetComponent<PickupController>() != null
+          && other.gameObject.GetComponent<PickupController>().IsResource
+          && !other.gameObject.GetComponent<PickupController>().IsHeld)
+        {
+            itemsOnMe.Remove(other.gameObject);
+        }
+    }
+
+    private IEnumerator SmeltOre(List<GameObject> bars)
     {
         Instantiate(smeltStartedParticleEffect, outputPoint.transform);
         yield return new WaitForSeconds(craftTime);
-        Destroy(ore);
+        foreach (var bar in bars)
+        {
+            Destroy(bar);
+            itemsOnMe.Remove(bar);
+        }
 
-        Instantiate(itemPrefab, outputPoint.transform.position, Quaternion.identity);
+        Instantiate(currentRecipe.Item, outputPoint.transform.position, Quaternion.identity);
         Instantiate(smeltDoneParticleEffect, outputPoint.transform);
+
+        itemsOnMe.RemoveAll(i => i == null);
+    }
+
+    public void SetRecipe(ItemRecipe recipe)
+    {
+        currentRecipe = recipe;
+        if (itemsOnMe.Count >= recipe.Bars)
+        {
+            var itemsToDestroy = new List<GameObject>();
+            for (int i = 0; i < recipe.Bars; i++)
+            {
+                itemsOnMe[i].GetComponent<Rigidbody>().isKinematic = false;
+                itemsOnMe[i].GetComponent<Collider>().enabled = false;
+                itemsToDestroy.Add(itemsOnMe[i]);
+            }
+
+            StartCoroutine(SmeltOre(itemsToDestroy));
+        }
+        else
+        {
+            print("Missing bars: " + (recipe.Bars - itemsOnMe.Count));
+        }
     }
 }

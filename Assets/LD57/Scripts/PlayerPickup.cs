@@ -15,6 +15,8 @@ public class PlayerPickup : MonoBehaviour
     GameObject lastTarget;
     Material originalMaterial;
 
+    public bool IsHandsEmpty => heldObject == null;
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
