@@ -5,6 +5,8 @@ public class FirstPersonController : MonoBehaviour
     public float moveSpeed;
     public float mouseSensitivity;
     public Transform cameraLook;
+    public float gravity;
+    public float jumpHeight;
 
     CharacterController characterController;
     InputSystem_Actions inputActions;
@@ -12,6 +14,8 @@ public class FirstPersonController : MonoBehaviour
     Vector2 inputMove;
     Vector2 inputLook;
     Vector3 velocity;
+
+    float verticalVelocity;
     float verticalRotation;
 
     private void Awake()
@@ -25,8 +29,18 @@ public class FirstPersonController : MonoBehaviour
         inputActions.Player.Look.performed += ctx => inputLook = ctx.ReadValue<Vector2>();
         inputActions.Player.Look.canceled += ctx => inputLook = Vector2.zero;
 
+        inputActions.Player.Jump.performed += HandleJump;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    private void HandleJump(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        if (characterController.isGrounded)
+        {
+            verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
     }
 
     private void Update()
@@ -39,6 +53,16 @@ public class FirstPersonController : MonoBehaviour
     {
         var move = transform.right * inputMove.x + transform.forward * inputMove.y;
         characterController.Move(move * moveSpeed * Time.deltaTime);
+
+        if (characterController.isGrounded && verticalRotation < 0)
+        {
+            verticalVelocity = -2f;
+        }
+
+        verticalVelocity += gravity * Time.deltaTime;
+
+        var velocity = Vector3.up * verticalVelocity;
+        characterController.Move(velocity * Time.deltaTime);
     }
 
     private void CameraLook()

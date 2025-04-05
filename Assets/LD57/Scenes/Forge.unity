@@ -2023,6 +2023,8 @@ MonoBehaviour:
   moveSpeed: 3
   mouseSensitivity: 0.2
   cameraLook: {fileID: 1624924508}
+  gravity: -9.81
+  jumpHeight: 3
 --- !u!4 &1311313983
 Transform:
   m_ObjectHideFlags: 0
