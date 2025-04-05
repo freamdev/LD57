@@ -26,7 +26,7 @@ public class PlayerPickup : MonoBehaviour
         {
             var target = hit.collider.gameObject;
 
-            if (target.GetComponent<OreController>() == null || !target.GetComponent<OreController>().IsInteractable)
+            if (target.GetComponent<PickupController>() == null || !target.GetComponent<PickupController>().IsInteractable)
             {
                 ClearHighlight();
                 return;
@@ -88,7 +88,7 @@ public class PlayerPickup : MonoBehaviour
     {
         heldObject.transform.SetParent(null);
 
-        heldObject.GetComponent<OreController>().IsHeld = false;
+        heldObject.GetComponent<PickupController>().IsHeld = false;
         var rigidBody = heldObject.GetComponent<Rigidbody>();
         rigidBody.isKinematic = false;
         rigidBody.linearVelocity = Vector3.zero;
@@ -101,12 +101,12 @@ public class PlayerPickup : MonoBehaviour
         {
             var target = hit.collider.gameObject;
 
-            if (target.GetComponent<OreController>() == null || !target.GetComponent<OreController>().IsInteractable)
+            if (target.GetComponent<PickupController>() == null || !target.GetComponent<PickupController>().IsInteractable)
             {
                 return;
             }
 
-            target.GetComponent<OreController>().IsHeld = true;
+            target.GetComponent<PickupController>().IsHeld = true;
             heldObject = target;
             heldObject.transform.SetParent(holdPoint);
             heldObject.transform.localPosition = Vector3.zero;

@@ -13,7 +13,10 @@ public class OreSmelter : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         print(other);
-        if (other.gameObject.layer == 7 && other.gameObject.GetComponent<OreController>() && !other.gameObject.GetComponent<OreController>().IsHeld)
+        if (other.gameObject.layer == 7
+            && other.gameObject.GetComponent<PickupController>() != null
+            && !other.gameObject.GetComponent<PickupController>().IsHeld
+            && other.gameObject.GetComponent<PickupController>().IsSmeltable)
         {
             other.GetComponent<Collider>().enabled = false;
             other.GetComponent<Rigidbody>().isKinematic = true;
