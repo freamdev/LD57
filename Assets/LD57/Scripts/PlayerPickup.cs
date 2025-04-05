@@ -125,7 +125,10 @@ public class PlayerPickup : MonoBehaviour
         }
         else
         {
-            noHitAction();
+            if (noHitAction != null)
+            {
+                noHitAction();
+            }
         }
     }
 }
