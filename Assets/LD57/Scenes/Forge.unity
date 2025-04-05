@@ -7187,6 +7187,7 @@ GameObject:
   - component: {fileID: 2135882862}
   - component: {fileID: 2135882861}
   - component: {fileID: 2135882864}
+  - component: {fileID: 2135882865}
   m_Layer: 0
   m_Name: FrontThing
   m_TagString: Untagged
@@ -7300,7 +7301,28 @@ MonoBehaviour:
   barPrefab: {fileID: 8014386008102646461, guid: 6b49b1dd043503846adca7abf2bd8272, type: 3}
   smeltTime: 3
   smeltStartedParticleEffect: {fileID: 4843466247261217427, guid: 96090d900c40b8e4f80c6917ddf47498, type: 3}
-  smeltDoneParticleEffect: {fileID: 0}
+  smeltDoneParticleEffect: {fileID: 9112297730682582933, guid: fa859000c395ba14ebeb944ed65dc5c5, type: 3}
+--- !u!65 &2135882865
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135882859}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: -0.000000059604645, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

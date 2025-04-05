@@ -24,11 +24,11 @@ public class OreSmelter : MonoBehaviour
 
     private IEnumerator SmeltOre(GameObject ore)
     {
-        var smeltEffect = Instantiate(smeltStartedParticleEffect, outputPoint.transform).GetComponent<ParticleSystem>().main;
-        smeltEffect.duration = smeltTime;
+        Instantiate(smeltStartedParticleEffect, outputPoint.transform);
         yield return new WaitForSeconds(smeltTime);
         Destroy(ore);
 
         Instantiate(barPrefab, outputPoint.transform.position, Quaternion.identity);
+        Instantiate(smeltDoneParticleEffect, outputPoint.transform);
     }
 }
