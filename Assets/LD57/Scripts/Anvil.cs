@@ -30,7 +30,6 @@ public class Anvil : MonoBehaviour
             && !other.gameObject.GetComponent<PickupController>().IsHeld)
         {
             itemsOnMe.Add(other.gameObject);
-
         }
     }
 
@@ -48,14 +47,22 @@ public class Anvil : MonoBehaviour
     private IEnumerator SmeltOre(List<GameObject> bars)
     {
         Instantiate(smeltStartedParticleEffect, outputPoint.transform);
-        yield return new WaitForSeconds(craftTime);
+        yield return new WaitForSeconds(craftTime / GameManager.GetInstance().craftingSpeedMultiplier);
         foreach (var bar in bars)
         {
             Destroy(bar);
         }
+
         isCrafting = false;
 
-        Instantiate(currentRecipe.Item, outputPoint.transform.position, Quaternion.identity);
+
+        var itemsCrafted = Random.Range(1, 1 * GameManager.GetInstance().craftingMultiplier);
+
+        for (int i = 0; i < itemsCrafted; i++)
+        {
+            Instantiate(currentRecipe.Item, outputPoint.transform.position, Quaternion.identity);
+        }
+
         Instantiate(smeltDoneParticleEffect, outputPoint.transform);
 
         itemsOnMe.RemoveAll(i => i == null);
@@ -65,11 +72,10 @@ public class Anvil : MonoBehaviour
     {
         if (isCrafting) return;
 
-        isCrafting = true;
-
-        currentRecipe = recipe;
         if (itemsOnMe.Count >= recipe.Bars)
         {
+            currentRecipe = recipe;
+            isCrafting = true;
             var itemsToDestroy = new List<GameObject>();
             for (int i = 0; i < recipe.Bars; i++)
             {

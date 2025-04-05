@@ -24,17 +24,32 @@ public class CounterPosition : MonoBehaviour
         requestedItem = GameManager.GetInstance().allItems.OrderBy(o => System.Guid.NewGuid()).FirstOrDefault();
         itemVisual = Instantiate<GameObject>(requestedItem, itemRequestPoint.position, Quaternion.Euler(0, 0, 45));
         requestTime = waitTime;
+        fulfilled = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == 7
+            && other.gameObject.GetComponent<PickupController>() != null
+            && other.gameObject.GetComponent<PickupController>().IsItem
+            && !other.gameObject.GetComponent<PickupController>().IsHeld)
+        {
+
+            TryFulfill(other.gameObject);
+        }
     }
 
     private void Update()
     {
+        if (dwarf == null) return;
         if (fulfilled) return;
 
         requestTime -= Time.deltaTime;
 
-        itemVisual.transform.Rotate(Vector3.up, 60 * Time.deltaTime);
-
-        print(requestTime);
+        if (itemVisual != null)
+        {
+            itemVisual.transform.Rotate(Vector3.up, 60 * Time.deltaTime);
+        }
 
         if (requestTime <= 0)
         {
@@ -44,7 +59,7 @@ public class CounterPosition : MonoBehaviour
 
     public void TryFulfill(GameObject item)
     {
-        if (item == requestedItem)
+        if (item == requestedItem || true)
         {
             Destroy(item);
             LeaveHappy();
@@ -55,11 +70,14 @@ public class CounterPosition : MonoBehaviour
     {
         Destroy(itemVisual);
         Destroy(dwarf.gameObject);
+        GameManager.GetInstance().Gold -= 50;
     }
 
     private void LeaveHappy()
     {
         Destroy(itemVisual);
+        GameManager.GetInstance().Gold += 300;
         fulfilled = true;
+        Destroy(dwarf.gameObject);
     }
 }

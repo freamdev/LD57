@@ -27,10 +27,16 @@ public class OreSmelter : MonoBehaviour
     private IEnumerator SmeltOre(GameObject ore)
     {
         Instantiate(smeltStartedParticleEffect, outputPoint.transform);
-        yield return new WaitForSeconds(smeltTime);
+        yield return new WaitForSeconds(smeltTime / GameManager.GetInstance().smeltingSpeedMultiplier);
         Destroy(ore);
 
-        Instantiate(barPrefab, outputPoint.transform.position, Quaternion.identity);
+        var itemsCrafted = Random.Range(1, 1 * GameManager.GetInstance().smeltingMultiplier);
+
+        for (int i = 0; i < itemsCrafted; i++)
+        {
+            Instantiate(barPrefab, outputPoint.transform.position, Quaternion.identity);
+        }
+
         Instantiate(smeltDoneParticleEffect, outputPoint.transform);
     }
 }
