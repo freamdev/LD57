@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fde765bb687396c4dbf3fb1efc6d981e, type: 3}
+  m_Script: {fileID: 11500000, guid: 203ebf6a4433adc44892b7e22d2dbdef, type: 3}
   m_Name: Sword
   m_EditorClassIdentifier: 
-  Inputs:
-  - Source: {fileID: 11400000, guid: 63b3ffea3bebfd642bc783153f38f4b1, type: 2}
-    Amount: 3
-  Output: {fileID: 11400000, guid: d228ebfc7a73e0548b1e69e463bfd6ec, type: 2}
+  Id: 3
+  Model: {fileID: 1750787754769204424, guid: dd2c82d430ae94d46b5dcfacd6daa610, type: 3}
+  Visual: {fileID: 1750787754769204424, guid: df62f2f9d87e7ef498984c5eaf1eee64, type: 3}
+  OreOnlyOutput: {fileID: 0}

@@ -13,23 +13,22 @@ public class Anvil : MonoBehaviour
 
     ItemRecipe currentRecipe;
 
-    List<GameObject> itemsOnMe;
+    List<PickupController> itemsOnMe;
 
     bool isCrafting;
 
     private void Awake()
     {
-        itemsOnMe = new List<GameObject>();
+        itemsOnMe = new List<PickupController>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 7
             && other.gameObject.GetComponent<PickupController>() != null
-            && other.gameObject.GetComponent<PickupController>().IsResource
             && !other.gameObject.GetComponent<PickupController>().IsHeld)
         {
-            itemsOnMe.Add(other.gameObject);
+            itemsOnMe.Add(other.gameObject.GetComponent<PickupController>());
         }
     }
 
@@ -37,20 +36,19 @@ public class Anvil : MonoBehaviour
     {
         if (other.gameObject.layer == 7
           && other.gameObject.GetComponent<PickupController>() != null
-          && other.gameObject.GetComponent<PickupController>().IsResource
           && !other.gameObject.GetComponent<PickupController>().IsHeld)
         {
-            itemsOnMe.Remove(other.gameObject);
+            itemsOnMe.Remove(other.gameObject.GetComponent<PickupController>());
         }
     }
 
-    private IEnumerator SmeltOre(List<GameObject> bars)
+    private IEnumerator SmeltOre(List<PickupController> bars)
     {
         Instantiate(smeltStartedParticleEffect, outputPoint.transform);
         yield return new WaitForSeconds(craftTime / GameManager.GetInstance().craftingSpeedMultiplier);
         foreach (var bar in bars)
         {
-            Destroy(bar);
+            Destroy(bar.gameObject);
         }
 
         isCrafting = false;
@@ -60,7 +58,7 @@ public class Anvil : MonoBehaviour
 
         for (int i = 0; i < itemsCrafted; i++)
         {
-            Instantiate(currentRecipe.Item, outputPoint.transform.position, Quaternion.identity);
+            Instantiate(currentRecipe.Output.Model, outputPoint.transform.position, Quaternion.identity);
         }
 
         Instantiate(smeltDoneParticleEffect, outputPoint.transform);
@@ -72,25 +70,57 @@ public class Anvil : MonoBehaviour
     {
         if (isCrafting) return;
 
-        if (itemsOnMe.Count >= recipe.Bars)
+
+        var items = TryConsumeRecipe(recipe);
+
+        if (items.Count > 0)
         {
             currentRecipe = recipe;
             isCrafting = true;
-            var itemsToDestroy = new List<GameObject>();
-            for (int i = 0; i < recipe.Bars; i++)
+
+            foreach (var item in items)
             {
-                itemsOnMe[i].GetComponent<Rigidbody>().isKinematic = false;
-                itemsOnMe[i].GetComponent<Collider>().enabled = false;
-                itemsToDestroy.Add(itemsOnMe[i]);
+                item.GetComponent<Rigidbody>().isKinematic = false;
+                item.GetComponent<Collider>().enabled = false;
             }
 
-            itemsOnMe.RemoveAll(i => itemsToDestroy.Contains(i));
+            itemsOnMe.RemoveAll(i => items.Contains(i));
+            StartCoroutine(SmeltOre(items));
+        }
+    }
 
-            StartCoroutine(SmeltOre(itemsToDestroy));
-        }
-        else
+    private List<PickupController> TryConsumeRecipe(ItemRecipe recipe)
+    {
+        var itemsToRemove = new List<PickupController>();
+
+        foreach (var part in recipe.Inputs)
         {
-            print("Missing bars: " + (recipe.Bars - itemsOnMe.Count));
+            print(recipe.name + " " + part.Source.name);
+            var found = 0;
+
+            foreach (var item in itemsOnMe)
+            {
+                if (item.Item.Id == part.Source.Id && !itemsToRemove.Contains(item))
+                {
+                    itemsToRemove.Add(item);
+                    found++;
+
+                    if (found >= part.Amount)
+                    {
+                        print("FOUND ENOUGH OF: " + part.Source.name);
+                        break;
+                    }
+                }
+            }
+
+            if (found < part.Amount)
+            {
+                print("WRONG RETURN: " + part.Source.name);
+                return new List<PickupController>();
+            }
         }
+
+        print("RIGHT RETURN");
+        return itemsToRemove;
     }
 }

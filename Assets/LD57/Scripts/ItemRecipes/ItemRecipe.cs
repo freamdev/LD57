@@ -1,8 +1,16 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Item recipe", menuName = "LD57/Recipes/Item recipe")]
+[CreateAssetMenu(fileName = "Item recipe", menuName = "LD57/Item recipe")]
 public class ItemRecipe : ScriptableObject
 {
-    public int Bars;
-    public GameObject Item;
+    public List<RecipePart> Inputs;
+    public Item Output;
+}
+
+[System.Serializable]
+public class RecipePart
+{
+    public Item Source;
+    public int Amount;
 }

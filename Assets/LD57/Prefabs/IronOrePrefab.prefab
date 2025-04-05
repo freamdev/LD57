@@ -152,3 +152,6 @@ MonoBehaviour:
   IsInteractable: 1
   IsHeld: 0
   IsSmeltable: 1
+  IsResource: 0
+  IsItem: 0
+  Item: {fileID: 11400000, guid: ef35486d554e2404ea9848aeb8624d85, type: 2}

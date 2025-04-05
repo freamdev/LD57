@@ -7,4 +7,6 @@ public class PickupController : MonoBehaviour
     public bool IsSmeltable;
     public bool IsResource;
     public bool IsItem;
+
+    public Item Item;
 }

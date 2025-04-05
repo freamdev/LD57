@@ -32,9 +32,12 @@ public class OreSmelter : MonoBehaviour
 
         var itemsCrafted = Random.Range(1, 1 * GameManager.GetInstance().smeltingMultiplier);
 
+        var itemToSpawn = ore.GetComponent<PickupController>().Item.OreOnlyOutput;
+
         for (int i = 0; i < itemsCrafted; i++)
         {
-            Instantiate(barPrefab, outputPoint.transform.position, Quaternion.identity);
+            var instance = Instantiate(itemToSpawn.Model, outputPoint.transform.position, Quaternion.identity);
+            instance.GetComponent<PickupController>().Item = itemToSpawn;
         }
 
         Instantiate(smeltDoneParticleEffect, outputPoint.transform);
