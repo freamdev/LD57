@@ -151,3 +151,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsInteractable: 1
   IsHeld: 0
+  IsSmeltable: 0
+  IsResource: 1

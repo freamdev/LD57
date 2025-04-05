@@ -1,11 +1,11 @@
 using System.Collections;
 using UnityEngine;
 
-public class OreSmelter : MonoBehaviour
+public class Anvil : MonoBehaviour
 {
     public Transform outputPoint;
-    public GameObject barPrefab;
-    public float smeltTime;
+    public GameObject itemPrefab;
+    public float craftTime;
 
     public GameObject smeltStartedParticleEffect;
     public GameObject smeltDoneParticleEffect;
@@ -15,7 +15,7 @@ public class OreSmelter : MonoBehaviour
         print(other);
         if (other.gameObject.layer == 7
             && other.gameObject.GetComponent<PickupController>() != null
-            && other.gameObject.GetComponent<PickupController>().IsSmeltable
+            && other.gameObject.GetComponent<PickupController>().IsResource
             && !other.gameObject.GetComponent<PickupController>().IsHeld)
         {
             other.GetComponent<Collider>().enabled = false;
@@ -28,10 +28,10 @@ public class OreSmelter : MonoBehaviour
     private IEnumerator SmeltOre(GameObject ore)
     {
         Instantiate(smeltStartedParticleEffect, outputPoint.transform);
-        yield return new WaitForSeconds(smeltTime);
+        yield return new WaitForSeconds(craftTime);
         Destroy(ore);
 
-        Instantiate(barPrefab, outputPoint.transform.position, Quaternion.identity);
+        Instantiate(itemPrefab, outputPoint.transform.position, Quaternion.identity);
         Instantiate(smeltDoneParticleEffect, outputPoint.transform);
     }
 }
