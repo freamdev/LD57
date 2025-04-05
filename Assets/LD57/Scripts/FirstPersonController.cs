@@ -24,6 +24,9 @@ public class FirstPersonController : MonoBehaviour
 
         inputActions.Player.Look.performed += ctx => inputLook = ctx.ReadValue<Vector2>();
         inputActions.Player.Look.canceled += ctx => inputLook = Vector2.zero;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void Update()
