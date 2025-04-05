@@ -28,12 +28,20 @@ public class FirstPersonController : MonoBehaviour
 
     private void Update()
     {
+        CharacterMove();
+        CameraLook();
+    }
+
+    private void CharacterMove()
+    {
         var move = transform.right * inputMove.x + transform.forward * inputMove.y;
         characterController.Move(move * moveSpeed * Time.deltaTime);
+    }
 
+    private void CameraLook()
+    {
         var mouseX = inputLook.x * mouseSensitivity;
         var mouseY = inputLook.y * mouseSensitivity;
-
 
         transform.Rotate(Vector3.up * mouseX);
 
