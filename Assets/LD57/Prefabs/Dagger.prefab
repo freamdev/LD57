@@ -155,6 +155,7 @@ MonoBehaviour:
   IsHeld: 0
   IsSmeltable: 0
   IsResource: 0
+  IsItem: 1
 --- !u!1 &4971158863211676889
 GameObject:
   m_ObjectHideFlags: 0

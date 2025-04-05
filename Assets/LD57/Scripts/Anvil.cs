@@ -15,6 +15,8 @@ public class Anvil : MonoBehaviour
 
     List<GameObject> itemsOnMe;
 
+    bool isCrafting;
+
     private void Awake()
     {
         itemsOnMe = new List<GameObject>();
@@ -50,17 +52,21 @@ public class Anvil : MonoBehaviour
         foreach (var bar in bars)
         {
             Destroy(bar);
-            itemsOnMe.Remove(bar);
         }
 
         Instantiate(currentRecipe.Item, outputPoint.transform.position, Quaternion.identity);
         Instantiate(smeltDoneParticleEffect, outputPoint.transform);
 
         itemsOnMe.RemoveAll(i => i == null);
+        isCrafting = false;
     }
 
     public void SetRecipe(ItemRecipe recipe)
     {
+        if (isCrafting) return;
+
+        isCrafting = true;
+
         currentRecipe = recipe;
         if (itemsOnMe.Count >= recipe.Bars)
         {
@@ -71,6 +77,8 @@ public class Anvil : MonoBehaviour
                 itemsOnMe[i].GetComponent<Collider>().enabled = false;
                 itemsToDestroy.Add(itemsOnMe[i]);
             }
+
+            itemsOnMe.RemoveAll(i => itemsToDestroy.Contains(i));
 
             StartCoroutine(SmeltOre(itemsToDestroy));
         }

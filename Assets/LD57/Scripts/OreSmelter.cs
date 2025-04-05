@@ -12,7 +12,6 @@ public class OreSmelter : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        print(other);
         if (other.gameObject.layer == 7
             && other.gameObject.GetComponent<PickupController>() != null
             && other.gameObject.GetComponent<PickupController>().IsSmeltable
