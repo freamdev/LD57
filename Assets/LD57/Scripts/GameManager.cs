@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public class GameManager : MonoBehaviour
     static GameManager instance;
 
     public TextMeshProUGUI goldText;
+    public List<GameObject> allItems;
 
     public static GameManager GetInstance()
     {

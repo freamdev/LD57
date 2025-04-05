@@ -53,12 +53,12 @@ public class Anvil : MonoBehaviour
         {
             Destroy(bar);
         }
+        isCrafting = false;
 
         Instantiate(currentRecipe.Item, outputPoint.transform.position, Quaternion.identity);
         Instantiate(smeltDoneParticleEffect, outputPoint.transform);
 
         itemsOnMe.RemoveAll(i => i == null);
-        isCrafting = false;
     }
 
     public void SetRecipe(ItemRecipe recipe)
