@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: EnchantedSword
   m_EditorClassIdentifier: 
   Id: 4
+  ItemName: Enchanted Sword
   Model: {fileID: 1750787754769204424, guid: cf461fbb49d117041b0d9b39c64fa728, type: 3}
   Visual: {fileID: 1750787754769204424, guid: 952a141efc959ea44b56d221a471bf81, type: 3}
   OreOnlyOutput: {fileID: 0}

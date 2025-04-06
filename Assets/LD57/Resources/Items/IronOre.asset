@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: IronOre
   m_EditorClassIdentifier: 
   Id: 2
+  ItemName: Iron Ore
   Model: {fileID: 8014386008102646461, guid: c75b1fdc7a102b942898caa5efead231, type: 3}
   Visual: {fileID: 8014386008102646461, guid: c75b1fdc7a102b942898caa5efead231, type: 3}
   OreOnlyOutput: {fileID: 11400000, guid: 63b3ffea3bebfd642bc783153f38f4b1, type: 2}

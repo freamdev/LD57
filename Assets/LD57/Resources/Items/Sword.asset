@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: 
   Id: 3
+  ItemName: Iron sword
   Model: {fileID: 1750787754769204424, guid: dd2c82d430ae94d46b5dcfacd6daa610, type: 3}
   Visual: {fileID: 1750787754769204424, guid: df62f2f9d87e7ef498984c5eaf1eee64, type: 3}
   OreOnlyOutput: {fileID: 0}

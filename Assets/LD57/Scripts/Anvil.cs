@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Anvil : MonoBehaviour
 {
@@ -8,12 +10,16 @@ public class Anvil : MonoBehaviour
     public GameObject itemPrefab;
     public float craftTime;
 
+    public List<ItemRecipe> recipes;
+
     public GameObject smeltStartedParticleEffect;
     public GameObject smeltDoneParticleEffect;
+    public Image craftingBarFill;
 
     ItemRecipe currentRecipe;
 
-    List<PickupController> itemsOnMe;
+    public List<PickupController> itemsOnMe;
+    public List<GameObject> Hammers;
 
     bool isCrafting;
 
@@ -44,8 +50,29 @@ public class Anvil : MonoBehaviour
 
     private IEnumerator SmeltOre(List<PickupController> bars)
     {
+        craftingBarFill.fillAmount = 1;
         Instantiate(smeltStartedParticleEffect, outputPoint.transform);
-        yield return new WaitForSeconds(craftTime / GameManager.GetInstance().craftingSpeedMultiplier);
+
+        foreach (var hammer in Hammers)
+        {
+            hammer.GetComponentInChildren<Animator>().CrossFade("Smith", .3f);
+            yield return new WaitForSeconds(Random.Range(0.1f, 0.3f));
+        }
+
+        var totalWaitTime = craftTime / GameManager.GetInstance().craftingSpeedMultiplier;
+        var t = totalWaitTime;
+
+        while (t > 0)
+        {
+            yield return new WaitForSeconds(Time.deltaTime);
+            t -= Time.deltaTime;
+            craftingBarFill.fillAmount = t / totalWaitTime;
+        }
+
+        craftingBarFill.fillAmount = 0;
+
+        //yield return new WaitForSeconds(craftTime / GameManager.GetInstance().craftingSpeedMultiplier);
+
         foreach (var bar in bars)
         {
             Destroy(bar.gameObject);
@@ -64,30 +91,72 @@ public class Anvil : MonoBehaviour
 
         Instantiate(smeltDoneParticleEffect, outputPoint.transform);
 
+        foreach (var hammer in Hammers)
+        {
+            hammer.GetComponentInChildren<Animator>().CrossFade("Idle", Random.Range(.2f, 1.1f));
+        }
+
         itemsOnMe.RemoveAll(i => i == null);
     }
 
-    public void SetRecipe(ItemRecipe recipe)
+    public void SetRecipe()
     {
         if (isCrafting) return;
 
 
-        var items = TryConsumeRecipe(recipe);
-
-        if (items.Count > 0)
+        foreach (var recipe in recipes)
         {
-            currentRecipe = recipe;
-            isCrafting = true;
-
-            foreach (var item in items)
+            var itemsCorrect = MatchesRecipe(recipe);
+            if (itemsCorrect != null)
             {
-                item.GetComponent<Rigidbody>().isKinematic = false;
-                item.GetComponent<Collider>().enabled = false;
+                currentRecipe = recipe;
+                isCrafting = true;
+
+                foreach (var item in itemsCorrect)
+                {
+                    item.GetComponent<Rigidbody>().isKinematic = false;
+                    item.GetComponent<Collider>().enabled = false;
+                }
+                var book = GameObject.FindAnyObjectByType<RecipesBook>();
+                if (!book.recipes.Contains(currentRecipe))
+                {
+                    book.recipes.Add(currentRecipe);
+                }
+                StartCoroutine(SmeltOre(itemsCorrect));
+            }
+        }
+    }
+
+    List<PickupController> MatchesRecipe(ItemRecipe recipe)
+    {
+        var available = new List<PickupController>(itemsOnMe.Where(w => w != null));
+        var response = new List<PickupController>();
+
+        foreach (var part in recipe.Inputs)
+        {
+            var count = 0;
+
+            foreach (var item in available.ToList())
+            {
+                if (item.Item == part.Source)
+                {
+                    response.Add(item);
+                    available.Remove(item);
+                    count++;
+                    if (count >= part.Amount)
+                        break;
+                }
             }
 
-            itemsOnMe.RemoveAll(i => items.Contains(i));
-            StartCoroutine(SmeltOre(items));
+            if (count < part.Amount)
+                return null;
         }
+
+        if (available.Count > 0)
+            return null;
+
+
+        return response;
     }
 
     private List<PickupController> TryConsumeRecipe(ItemRecipe recipe)
@@ -96,7 +165,6 @@ public class Anvil : MonoBehaviour
 
         foreach (var part in recipe.Inputs)
         {
-            print(recipe.name + " " + part.Source.name);
             var found = 0;
 
             foreach (var item in itemsOnMe)
@@ -108,7 +176,6 @@ public class Anvil : MonoBehaviour
 
                     if (found >= part.Amount)
                     {
-                        print("FOUND ENOUGH OF: " + part.Source.name);
                         break;
                     }
                 }
@@ -116,12 +183,10 @@ public class Anvil : MonoBehaviour
 
             if (found < part.Amount)
             {
-                print("WRONG RETURN: " + part.Source.name);
                 return new List<PickupController>();
             }
         }
 
-        print("RIGHT RETURN");
         return itemsToRemove;
     }
 }

@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 203ebf6a4433adc44892b7e22d2dbdef, type: 3}
   m_Name: Dagger
   m_EditorClassIdentifier: 
+  Id: 0
+  ItemName: Iron Dagger
   Model: {fileID: 1750787754769204424, guid: 9e20dd2791c15fd49b40e06221363851, type: 3}
   Visual: {fileID: 1750787754769204424, guid: 8fb9a5114dd4ed041a47d3e9bf43088e, type: 3}
   OreOnlyOutput: {fileID: 0}

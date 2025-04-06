@@ -5,6 +5,8 @@ public class Item : ScriptableObject
 {
     public int Id;
 
+    public string ItemName;
+
     public GameObject Model;
     public GameObject Visual;
 

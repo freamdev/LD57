@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: IronBar
   m_EditorClassIdentifier: 
   Id: 1
+  ItemName: Iron Bar
   Model: {fileID: 8014386008102646461, guid: 6b49b1dd043503846adca7abf2bd8272, type: 3}
   Visual: {fileID: 8014386008102646461, guid: 6b49b1dd043503846adca7abf2bd8272, type: 3}
   OreOnlyOutput: {fileID: 0}

@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +10,8 @@ public class PlayerPickup : MonoBehaviour
     public float pickupRange;
     public LayerMask pickupMask;
     public Material hightlightMaterial;
+
+    public TextMeshProUGUI currentItemText;
 
     PlayerInput playerInput;
     InputAction pickupAction;
@@ -27,12 +31,12 @@ public class PlayerPickup : MonoBehaviour
         RaycastHandler((hit) =>
         {
             var target = hit.collider.gameObject;
-
             if (target.GetComponent<PickupController>() == null || !target.GetComponent<PickupController>().IsInteractable)
             {
                 ClearHighlight();
                 return;
             }
+            currentItemText.text = target.GetComponent<PickupController>().Item.ItemName;
 
             if (lastTarget != target)
             {
@@ -60,6 +64,8 @@ public class PlayerPickup : MonoBehaviour
             lastTarget = null;
             originalMaterial = null;
         }
+
+        currentItemText.text = "";
     }
 
     private void OnEnable()
@@ -113,6 +119,12 @@ public class PlayerPickup : MonoBehaviour
             heldObject.transform.SetParent(holdPoint);
             heldObject.transform.localPosition = Vector3.zero;
             heldObject.GetComponent<Rigidbody>().isKinematic = true;
+
+            foreach (var machine in FindObjectsByType<Anvil>(FindObjectsSortMode.None).ToList())
+            {
+                machine.itemsOnMe.Remove(target.GetComponent<PickupController>());
+            }
+
         }, null);
 
 

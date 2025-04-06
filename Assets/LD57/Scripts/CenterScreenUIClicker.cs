@@ -14,7 +14,7 @@ public class CenterScreenUIClicker : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(interactKey))
+        if (Input.GetKeyDown(interactKey) || Input.GetMouseButtonDown(0))
         {
             pointerEventData = new PointerEventData(eventSystem);
 

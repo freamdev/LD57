@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: MysticStone
   m_EditorClassIdentifier: 
   Id: 0
+  ItemName: Mystic Stone
   Model: {fileID: 7859839896228209950, guid: 4cc85be5f09904348900ff98ad5c2542, type: 3}
   Visual: {fileID: 0}
   OreOnlyOutput: {fileID: 0}

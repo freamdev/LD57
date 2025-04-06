@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
 
     public float Gold;
 
+    public List<string> dwarfHappyMessages;
+
     private void Awake()
     {
     }
