@@ -15,6 +15,5 @@ MonoBehaviour:
   Inputs:
   - Source: {fileID: 11400000, guid: 63b3ffea3bebfd642bc783153f38f4b1, type: 2}
     Amount: 1
-  - Source: {fileID: 11400000, guid: ef35486d554e2404ea9848aeb8624d85, type: 2}
-    Amount: 1
   Output: {fileID: 11400000, guid: 4f040bdbef47cbc40aa17297190e034a, type: 2}
+  CraftTime: 2.3

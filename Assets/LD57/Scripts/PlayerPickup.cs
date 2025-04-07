@@ -42,7 +42,7 @@ public class PlayerPickup : MonoBehaviour
             {
                 ClearHighlight();
 
-                var renderer = target.GetComponent<Renderer>();
+                var renderer = target.GetComponent<PickupController>().GetRenderer();
                 if (renderer)
                 {
                     originalMaterial = renderer.material;
@@ -57,7 +57,7 @@ public class PlayerPickup : MonoBehaviour
     {
         if (lastTarget)
         {
-            var renderer = lastTarget.GetComponent<Renderer>();
+            var renderer = lastTarget.GetComponent<PickupController>().GetRenderer();
 
             renderer.material = originalMaterial;
 
@@ -114,11 +114,18 @@ public class PlayerPickup : MonoBehaviour
                 return;
             }
 
+            if (GameManager.GetInstance().currentObjective == GameManager.Objectives.Interact)
+            {
+                GameManager.GetInstance().NextObjective(GameManager.Objectives.FirstSmelt);
+            }
+
             target.GetComponent<PickupController>().IsHeld = true;
             heldObject = target;
             heldObject.transform.SetParent(holdPoint);
             heldObject.transform.localPosition = Vector3.zero;
             heldObject.GetComponent<Rigidbody>().isKinematic = true;
+
+            PlayerPrefsKey.TrySetPlayerPref(PlayerPrefsKey.ItemsPicked, 1, true);
 
             foreach (var machine in FindObjectsByType<Anvil>(FindObjectsSortMode.None).ToList())
             {

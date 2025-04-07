@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DwarfWaddle : MonoBehaviour
@@ -9,10 +11,13 @@ public class DwarfWaddle : MonoBehaviour
 
     public bool isWalking;
 
+    public List<GameObject> heads;
+
     private Vector3 basePosition;
     private Quaternion baseRotation;
 
     private float offset;
+
 
     void Start()
     {
@@ -20,6 +25,8 @@ public class DwarfWaddle : MonoBehaviour
         baseRotation = transform.localRotation;
 
         offset = Random.Range(0f, 3f);
+
+        heads.OrderBy(o => System.Guid.NewGuid()).First().SetActive(true);
     }
 
     void Update()

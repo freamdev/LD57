@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 203ebf6a4433adc44892b7e22d2dbdef, type: 3}
+  m_Name: 4EnchantedSword
+  m_EditorClassIdentifier: 
+  Id: 4
+  ItemName: Enchanted Sword
+  Model: {fileID: 4081339740040825449, guid: 800cd73c705b02e4399aa0d4f83080ed, type: 3}
+  Visual: {fileID: 4081339740040825449, guid: 6208a58602b8e15408cf5ed76ea84dda, type: 3}
+  OreOnlyOutput: {fileID: 0}
+  GoldReward: 400

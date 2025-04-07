@@ -10,7 +10,6 @@ public class RecipesBook : MonoBehaviour
 
     private void Start()
     {
-        ShowRecipes();
     }
 
     private void Update()

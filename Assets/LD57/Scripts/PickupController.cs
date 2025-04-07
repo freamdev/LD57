@@ -9,4 +9,11 @@ public class PickupController : MonoBehaviour
     public bool IsItem;
 
     public Item Item;
+
+    public Renderer ModelRenderer;
+
+    public Renderer GetRenderer()
+    {
+        return ModelRenderer;
+    }
 }

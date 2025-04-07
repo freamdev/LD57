@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fde765bb687396c4dbf3fb1efc6d981e, type: 3}
+  m_Name: MagicDagger
+  m_EditorClassIdentifier: 
+  Inputs:
+  - Source: {fileID: 11400000, guid: 63b3ffea3bebfd642bc783153f38f4b1, type: 2}
+    Amount: 2
+  - Source: {fileID: 11400000, guid: d94b9b790962ab14ab3b383b6cb7c103, type: 2}
+    Amount: 1
+  Output: {fileID: 11400000, guid: 184abda82ec92dc408e77249ae0d1414, type: 2}
+  CraftTime: 4

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -24,16 +25,24 @@ public class CounterPosition : MonoBehaviour
     bool readyToTrade;
     float currentWalkSpeed;
 
+    public AudioClip moneyClip;
+    public List<AudioClip> dwarfSounds;
+    public AudioClip happyDwarfSound;
+    public AudioClip sadDwarfSound;
+
+    public AudioSource coinSource;
+    public AudioSource dwarfSource;
+
     private void Awake()
     {
         fulfilled = false;
     }
 
-    public void AddDwarf(GameObject d, float waitTime)
+    public void AddDwarf(GameObject d, float waitTime, RecipesBook book)
     {
         dwarf = d;
         dwarf.transform.rotation = Quaternion.Euler(0, 270, 0);
-        requestedItem = GameManager.GetInstance().allItems.OrderBy(o => System.Guid.NewGuid()).FirstOrDefault();
+        requestedItem = book.recipes.OrderBy(o => System.Guid.NewGuid()).FirstOrDefault().Output;
         itemVisual = Instantiate<GameObject>(requestedItem.Visual, dwarf.transform.position + Vector3.up * itemRequestHeight, Quaternion.Euler(0, 0, 45));
         itemVisual.transform.SetParent(dwarf.transform);
         requestTime = waitTime;
@@ -43,6 +52,10 @@ public class CounterPosition : MonoBehaviour
         StartCoroutine(MoveDwarfToTradePosition(dwarfTradePosition.position));
         StartCoroutine(RotateVisual());
         currentWalkSpeed = walkSpeed;
+
+        dwarfSource.clip = dwarfSounds.OrderBy(o => System.Guid.NewGuid()).First();
+        dwarfSource.Play();
+
         ResetUI();
     }
 
@@ -146,20 +159,31 @@ public class CounterPosition : MonoBehaviour
     private void LeaveSad()
     {
         Destroy(itemVisual);
-        GameManager.GetInstance().Gold -= 50;
+        GameManager.GetInstance().Gold -= 20;
         currentWalkSpeed *= 2;
         ResetUI();
+        dwarfSource.clip = sadDwarfSound;
+        dwarfSource.Play();
         StartCoroutine(MoveDwarfToTradePosition(dwarfSpawnPosition.position, true));
+        PlayerPrefsKey.TrySetPlayerPref(PlayerPrefsKey.Total, 1, true);
     }
 
     private void LeaveHappy()
     {
+        if (GameManager.GetInstance().currentObjective == GameManager.Objectives.FirstFulfill)
+        {
+            GameManager.GetInstance().NextObjective(GameManager.Objectives.SecondCraft);
+        }
         Destroy(itemVisual);
-        GameManager.GetInstance().Gold += 300;
+        GameManager.GetInstance().Gold += requestedItem.GoldReward;
         fulfilled = true;
         ResetUI();
         Instantiate(gotGoldEffect, transform.position + Vector3.up * .5f, Quaternion.identity);
-        GetComponent<AudioSource>().Play();
+        dwarfSource.clip = happyDwarfSound;
+        dwarfSource.Play();
+        coinSource.Play();
         StartCoroutine(MoveDwarfToTradePosition(dwarfSpawnPosition.position, true));
+        PlayerPrefsKey.TrySetPlayerPref(PlayerPrefsKey.Success, 1, true);
+        PlayerPrefsKey.TrySetPlayerPref(PlayerPrefsKey.Total, 1, true);
     }
 }

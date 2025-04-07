@@ -16,3 +16,4 @@ MonoBehaviour:
   - Source: {fileID: 11400000, guid: 63b3ffea3bebfd642bc783153f38f4b1, type: 2}
     Amount: 3
   Output: {fileID: 11400000, guid: d228ebfc7a73e0548b1e69e463bfd6ec, type: 2}
+  CraftTime: 4

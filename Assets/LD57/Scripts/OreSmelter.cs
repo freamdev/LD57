@@ -27,6 +27,12 @@ public class OreSmelter : MonoBehaviour
     private IEnumerator SmeltOre(GameObject ore)
     {
         Instantiate(smeltStartedParticleEffect, outputPoint.transform);
+
+        if (GameManager.GetInstance().currentObjective == GameManager.Objectives.FirstSmelt)
+        {
+            GameManager.GetInstance().NextObjective(GameManager.Objectives.FirstCraft);
+        }
+
         yield return new WaitForSeconds(smeltTime / GameManager.GetInstance().smeltingSpeedMultiplier);
         Destroy(ore);
 

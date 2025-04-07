@@ -6,6 +6,7 @@ public class ItemRecipe : ScriptableObject
 {
     public List<RecipePart> Inputs;
     public Item Output;
+    public float CraftTime;
 }
 
 [System.Serializable]

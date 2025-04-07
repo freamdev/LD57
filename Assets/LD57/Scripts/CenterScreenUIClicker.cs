@@ -11,23 +11,53 @@ public class CenterScreenUIClicker : MonoBehaviour
     public KeyCode interactKey;
 
     private PointerEventData pointerEventData;
+    private GameObject lastHovered;
+
+    PlayerPickup playerPickup;
+
+    private void Awake()
+    {
+        playerPickup = FindAnyObjectByType<PlayerPickup>();
+    }
 
     private void Update()
     {
-        if (Input.GetKeyDown(interactKey) || Input.GetMouseButtonDown(0))
+        pointerEventData = new PointerEventData(eventSystem);
+        pointerEventData.position = new Vector2(Screen.width / 2, Screen.height / 2);
+        var results = new List<RaycastResult>();
+        raycaster.Raycast(pointerEventData, results);
+
+        GameObject hoveredButton = null;
+
+        foreach (var r in results)
         {
-            pointerEventData = new PointerEventData(eventSystem);
-
-            pointerEventData.position = new Vector2(Screen.width / 2, Screen.height / 2);
-            var results = new List<RaycastResult>();
-
-            raycaster.Raycast(pointerEventData, results);
-
-            foreach (var r in results)
+            if (r.gameObject.GetComponent<Button>())
             {
-                ExecuteEvents.Execute(r.gameObject, pointerEventData, ExecuteEvents.pointerClickHandler);
+                hoveredButton = r.gameObject;
                 break;
             }
         }
+
+        if (hoveredButton != lastHovered)
+        {
+            if (lastHovered) OnHoverExit(lastHovered);
+            if (hoveredButton) OnHoverEnter(hoveredButton);
+            lastHovered = hoveredButton;
+        }
+
+        if ((Input.GetKeyDown(interactKey) || Input.GetMouseButtonDown(0)) && hoveredButton)
+        {
+            ExecuteEvents.Execute(hoveredButton, pointerEventData, ExecuteEvents.pointerClickHandler);
+        }
+    }
+
+    void OnHoverEnter(GameObject go)
+    {
+        playerPickup.currentItemText.text = "Press [E] to use";
+    }
+
+    void OnHoverExit(GameObject go)
+    {
+        playerPickup.currentItemText.text = "";
     }
 }

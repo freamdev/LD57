@@ -11,4 +11,5 @@ public class Item : ScriptableObject
     public GameObject Visual;
 
     public Item OreOnlyOutput;
+    public int GoldReward;
 }

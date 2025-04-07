@@ -23,7 +23,14 @@ public class FirstPersonController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         inputActions = new InputSystem_Actions();
 
-        inputActions.Player.Move.performed += ctx => inputMove = ctx.ReadValue<Vector2>();
+        inputActions.Player.Move.performed += ctx =>
+        {
+            inputMove = ctx.ReadValue<Vector2>();
+            if (GameManager.GetInstance().currentObjective == GameManager.Objectives.Move)
+            {
+                GameManager.GetInstance().NextObjective(GameManager.Objectives.Interact);
+            }
+        };
         inputActions.Player.Move.canceled += ctx => inputMove = Vector2.zero;
 
         inputActions.Player.Look.performed += ctx => inputLook = ctx.ReadValue<Vector2>();

@@ -151,7 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsInteractable: 1
   IsHeld: 0
-  IsSmeltable: 0
+  IsSmeltable: 1
   IsResource: 0
   IsItem: 0
   Item: {fileID: 11400000, guid: 640fd571f4235aa43a3586a669f9e6e6, type: 2}

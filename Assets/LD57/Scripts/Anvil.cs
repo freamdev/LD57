@@ -8,7 +8,6 @@ public class Anvil : MonoBehaviour
 {
     public Transform outputPoint;
     public GameObject itemPrefab;
-    public float craftTime;
 
     public List<ItemRecipe> recipes;
 
@@ -51,7 +50,21 @@ public class Anvil : MonoBehaviour
     private IEnumerator SmeltOre(List<PickupController> bars)
     {
         craftingBarFill.fillAmount = 1;
-        Instantiate(smeltStartedParticleEffect, outputPoint.transform);
+
+        if (smeltStartedParticleEffect != null)
+        {
+            Instantiate(smeltStartedParticleEffect, outputPoint.transform);
+        }
+
+        if (GameManager.GetInstance().currentObjective == GameManager.Objectives.FirstCraft)
+        {
+            GameManager.GetInstance().NextObjective(GameManager.Objectives.FirstFulfill);
+        }
+
+        if (GameManager.GetInstance().currentObjective == GameManager.Objectives.SecondCraft)
+        {
+            GameManager.GetInstance().NextObjective(GameManager.Objectives.Done);
+        }
 
         foreach (var hammer in Hammers)
         {
@@ -59,7 +72,7 @@ public class Anvil : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(0.1f, 0.3f));
         }
 
-        var totalWaitTime = craftTime / GameManager.GetInstance().craftingSpeedMultiplier;
+        var totalWaitTime = currentRecipe.CraftTime / GameManager.GetInstance().craftingSpeedMultiplier;
         var t = totalWaitTime;
 
         while (t > 0)
@@ -70,8 +83,6 @@ public class Anvil : MonoBehaviour
         }
 
         craftingBarFill.fillAmount = 0;
-
-        //yield return new WaitForSeconds(craftTime / GameManager.GetInstance().craftingSpeedMultiplier);
 
         foreach (var bar in bars)
         {
@@ -89,7 +100,11 @@ public class Anvil : MonoBehaviour
             item.GetComponent<PickupController>().Item = currentRecipe.Output;
         }
 
-        Instantiate(smeltDoneParticleEffect, outputPoint.transform);
+        if (smeltDoneParticleEffect != null)
+        {
+            Instantiate(smeltDoneParticleEffect, outputPoint.transform);
+        }
+
 
         foreach (var hammer in Hammers)
         {
@@ -102,7 +117,6 @@ public class Anvil : MonoBehaviour
     public void SetRecipe()
     {
         if (isCrafting) return;
-
 
         foreach (var recipe in recipes)
         {
@@ -121,6 +135,7 @@ public class Anvil : MonoBehaviour
                 if (!book.recipes.Contains(currentRecipe))
                 {
                     book.recipes.Add(currentRecipe);
+                    PlayerPrefsKey.TrySetPlayerPref(PlayerPrefsKey.RecipesUnlocked, 1, true);
                 }
                 StartCoroutine(SmeltOre(itemsCorrect));
             }

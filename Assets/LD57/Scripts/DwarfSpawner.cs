@@ -12,15 +12,20 @@ public class DwarfSpawner : MonoBehaviour
 
     float spawnTime;
 
+    RecipesBook book;
+
     private void Awake()
     {
         spawnPoints = FindObjectsByType<CounterPosition>(FindObjectsSortMode.None).ToList();
         spawnTime = spawnRate;
+        book = GameObject.FindAnyObjectByType<RecipesBook>();
     }
 
     private void Update()
     {
         spawnTime -= Time.deltaTime;
+
+        if (book.recipes.Count == 0) return;
 
         if (spawnTime < 0)
         {
@@ -36,6 +41,6 @@ public class DwarfSpawner : MonoBehaviour
     {
         var emptySpot = spawnPoints.Where(f => f.dwarf == null).OrderBy(o => System.Guid.NewGuid()).FirstOrDefault();
         var dwarf = Instantiate(dwarfPrefab, emptySpot.dwarfSpawnPosition.position, Quaternion.identity);
-        emptySpot.AddDwarf(dwarf, waitTime);
+        emptySpot.AddDwarf(dwarf, waitTime, book);
     }
 }
